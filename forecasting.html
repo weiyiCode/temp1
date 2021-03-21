@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>6 Forecasting | ARMA Modeling</title>
+  <meta name="description" content="6 Forecasting | ARMA Modeling" />
+  <meta name="generator" content="bookdown 0.20.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="6 Forecasting | ARMA Modeling" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="6 Forecasting | ARMA Modeling" />
+  
+  
+  
+
+<meta name="author" content="Weiyi Weng" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="arma-modeling.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="import-data.html"><a href="import-data.html"><i class="fa fa-check"></i><b>2</b> Import Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="import-data.html"><a href="import-data.html#import-data-in-.csv-format"><i class="fa fa-check"></i><b>2.1</b> Import data in <em>.csv</em> format</a></li>
+<li class="chapter" data-level="2.2" data-path="import-data.html"><a href="import-data.html#specify-the-time-variable-declare-the-data-to-be-time-series"><i class="fa fa-check"></i><b>2.2</b> specify the time variable &amp; declare the data to be time series</a></li>
+<li class="chapter" data-level="2.3" data-path="import-data.html"><a href="import-data.html#save-processed-data-as-.dta-file-for-future-use"><i class="fa fa-check"></i><b>2.3</b> save processed data as <em>.dta</em> file for future use</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preliminary-analysis.html"><a href="preliminary-analysis.html"><i class="fa fa-check"></i><b>3</b> Preliminary Analysis</a></li>
+<li class="chapter" data-level="4" data-path="unit-root-tests.html"><a href="unit-root-tests.html"><i class="fa fa-check"></i><b>4</b> Unit Root Tests</a><ul>
+<li class="chapter" data-level="4.1" data-path="unit-root-tests.html"><a href="unit-root-tests.html#adf-test"><i class="fa fa-check"></i><b>4.1</b> ADF Test</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="unit-root-tests.html"><a href="unit-root-tests.html#adf-test-in-level"><i class="fa fa-check"></i><b>4.1.1</b> ADF Test in level</a></li>
+<li class="chapter" data-level="4.1.2" data-path="unit-root-tests.html"><a href="unit-root-tests.html#adf-test-in-first-difference"><i class="fa fa-check"></i><b>4.1.2</b> ADF Test in first-difference</a></li>
+<li class="chapter" data-level="4.1.3" data-path="unit-root-tests.html"><a href="unit-root-tests.html#adf-test-in-second-difference"><i class="fa fa-check"></i><b>4.1.3</b> ADF Test in second-difference</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="unit-root-tests.html"><a href="unit-root-tests.html#adf-gls-tests"><i class="fa fa-check"></i><b>4.2</b> ADF-GLS Tests</a></li>
+<li class="chapter" data-level="4.3" data-path="unit-root-tests.html"><a href="unit-root-tests.html#sample-ac"><i class="fa fa-check"></i><b>4.3</b> Sample AC</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="arma-modeling.html"><a href="arma-modeling.html"><i class="fa fa-check"></i><b>5</b> ARMA Modeling</a><ul>
+<li class="chapter" data-level="5.1" data-path="arma-modeling.html"><a href="arma-modeling.html#arma-modeling-d.yyy"><i class="fa fa-check"></i><b>5.1</b> ARMA Modeling: d.yyy</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="arma-modeling.html"><a href="arma-modeling.html#identification"><i class="fa fa-check"></i><b>5.1.1</b> Identification</a></li>
+<li class="chapter" data-level="5.1.2" data-path="arma-modeling.html"><a href="arma-modeling.html#estimation-diagnostics-arma"><i class="fa fa-check"></i><b>5.1.2</b> Estimation &amp; Diagnostics (ARMA)</a></li>
+<li class="chapter" data-level="5.1.3" data-path="arma-modeling.html"><a href="arma-modeling.html#estimation-diagnostics-pure-ar"><i class="fa fa-check"></i><b>5.1.3</b> Estimation &amp; Diagnostics (Pure AR)</a></li>
+<li class="chapter" data-level="5.1.4" data-path="arma-modeling.html"><a href="arma-modeling.html#estimation-diagnostics-pure-ma"><i class="fa fa-check"></i><b>5.1.4</b> Estimation &amp; Diagnostics (Pure MA)</a></li>
+<li class="chapter" data-level="5.1.5" data-path="arma-modeling.html"><a href="arma-modeling.html#estimation-diagnostics-additive-seasonal-arima"><i class="fa fa-check"></i><b>5.1.5</b> Estimation &amp; Diagnostics (Additive seasonal ARIMA)</a></li>
+<li class="chapter" data-level="5.1.6" data-path="arma-modeling.html"><a href="arma-modeling.html#estimation-diagnostics-multiplicative-seasonal-arima"><i class="fa fa-check"></i><b>5.1.6</b> Estimation &amp; Diagnostics (Multiplicative seasonal ARIMA)</a></li>
+<li class="chapter" data-level="5.1.7" data-path="arma-modeling.html"><a href="arma-modeling.html#model-selection-use-common-sample"><i class="fa fa-check"></i><b>5.1.7</b> Model selection: use common sample</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="arma-modeling.html"><a href="arma-modeling.html#arma-modeling-d2.yyy"><i class="fa fa-check"></i><b>5.2</b> ARMA Modeling: d2.yyy</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="arma-modeling.html"><a href="arma-modeling.html#identification-1"><i class="fa fa-check"></i><b>5.2.1</b> Identification</a></li>
+<li class="chapter" data-level="5.2.2" data-path="arma-modeling.html"><a href="arma-modeling.html#estimation-diagnostics"><i class="fa fa-check"></i><b>5.2.2</b> Estimation &amp; Diagnostics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i><b>6</b> Forecasting</a><ul>
+<li class="chapter" data-level="6.1" data-path="forecasting.html"><a href="forecasting.html#in-sample-fitted-values"><i class="fa fa-check"></i><b>6.1</b> In-sample fitted values</a></li>
+<li class="chapter" data-level="6.2" data-path="forecasting.html"><a href="forecasting.html#dynamicextrapolationrecursive-forecasts"><i class="fa fa-check"></i><b>6.2</b> Dynamic/Extrapolation/Recursive forecasts</a></li>
+<li class="chapter" data-level="6.3" data-path="forecasting.html"><a href="forecasting.html#step-ahead-forecasts"><i class="fa fa-check"></i><b>6.3</b> 1-step-ahead forecasts</a></li>
+<li class="chapter" data-level="6.4" data-path="forecasting.html"><a href="forecasting.html#step-ahead-forecasts-1"><i class="fa fa-check"></i><b>6.4</b> 4-step-ahead forecasts</a></li>
+<li class="chapter" data-level="6.5" data-path="forecasting.html"><a href="forecasting.html#forecast-evaluation-statistics-rmspe-mppe-mappe"><i class="fa fa-check"></i><b>6.5</b> Forecast evaluation statistics: RMSPE, MPPE, MAPPE</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ARMA Modeling</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="forecasting" class="section level1">
+<h1><span class="header-section-number">6</span> Forecasting</h1>
+<div id="in-sample-fitted-values" class="section level2">
+<h2><span class="header-section-number">6.1</span> In-sample fitted values</h2>
+<div class="sourceCode" id="cb164"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb164-1"><a href="forecasting.html#cb164-1"></a><span class="co">/* use full sample for estimation */</span></span>
+<span id="cb164-2"><a href="forecasting.html#cb164-2"></a><span class="co">/* arima d.yyy, arima(1,0,1) */</span></span>
+<span id="cb164-3"><a href="forecasting.html#cb164-3"></a>   <span class="kw">arima</span> <span class="kw">d</span>.yyy, ma(1 2 4 10 11)	</span>
+<span id="cb164-4"><a href="forecasting.html#cb164-4"></a><span class="co">/* arima d2.yyy, arima(1,0,1) */</span></span></code></pre></div>
+<pre><code>(setting optimization to BHHH)
+Iteration 0:   log likelihood =  660.10946  
+Iteration 1:   log likelihood =  660.45577  
+Iteration 2:   log likelihood =  660.51453  
+Iteration 3:   log likelihood =  660.52955  
+Iteration 4:   log likelihood =  660.53352  
+(switching optimization to BFGS)
+Iteration 5:   log likelihood =   660.5347  
+Iteration 6:   log likelihood =  660.53524  
+Iteration 7:   log likelihood =  660.53526  
+
+ARIMA regression
+
+Sample:  1957q2 - 2006q2                        Number of obs     =        197
+                                                Wald chi2(5)      =      58.32
+Log likelihood =  660.5353                      Prob &gt; chi2       =     0.0000
+
+------------------------------------------------------------------------------
+             |                 OPG
+       D.yyy |      Coef.   Std. Err.      z    P&gt;|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+yyy          |
+       _cons |   .0168866   .0012613    13.39   0.000     .0144144    .0193588
+-------------+----------------------------------------------------------------
+ARMA         |
+          ma |
+         L1. |   .2919739   .0586594     4.98   0.000     .1770036    .4069442
+         L2. |    .146004   .0698232     2.09   0.037      .009153     .282855
+         L4. |   .1824151   .0615452     2.96   0.003     .0617886    .3030415
+        L10. |   .1718678    .063352     2.71   0.007     .0477002    .2960354
+        L11. |   .2708313    .076412     3.54   0.000     .1210665    .4205961
+-------------+----------------------------------------------------------------
+      /sigma |   .0084366   .0003307    25.51   0.000     .0077885    .0090847
+------------------------------------------------------------------------------
+Note: The test of the variance against zero is one sided, and the two-sided
+      confidence interval is truncated at zero.</code></pre>
+<div class="sourceCode" id="cb166"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb166-1"><a href="forecasting.html#cb166-1"></a>cap <span class="kw">drop</span> y_fit dy_fit	</span>
+<span id="cb166-2"><a href="forecasting.html#cb166-2"></a><span class="kw">predict</span> y_fit, <span class="fu">y</span> 		</span>
+<span id="cb166-3"><a href="forecasting.html#cb166-3"></a><span class="kw">predict</span> dy_fit, <span class="kw">xb</span>		</span>
+<span id="cb166-4"><a href="forecasting.html#cb166-4"></a><span class="kw">label</span> <span class="kw">var</span> y_fit <span class="st">&quot;In-sample fitted values of levels&quot;</span></span>
+<span id="cb166-5"><a href="forecasting.html#cb166-5"></a><span class="kw">label</span> <span class="kw">var</span> dy_fit <span class="st">&quot;In-sample fitted values of differences&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb167-1"><a href="forecasting.html#cb167-1"></a><span class="ot">list</span> time y_fit dy_fit <span class="kw">in</span> 1/6</span></code></pre></div>
+<pre><code>     |   time      y_fit     dy_fit |
+     |------------------------------|
+  1. | 1957Q1          .   .0168866 |
+  2. | 1957Q2   6.142008   .0168866 |
+  3. | 1957Q3   6.142532   .0130461 |
+  4. | 1957Q4   6.160923   .0158793 |
+  5. | 1958Q1   6.143454   .0089719 |
+     |------------------------------|
+  6. | 1958Q2   6.122191   .0040943 |
+     +------------------------------+</code></pre>
+<div class="sourceCode" id="cb169"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb169-1"><a href="forecasting.html#cb169-1"></a><span class="kw">tsline</span> yyy y_fit <span class="kw">if</span> <span class="fu">tin</span>(1999q1,)</span></code></pre></div>
+<p><img src="plot33.svg" /></p>
+<div class="sourceCode" id="cb170"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb170-1"><a href="forecasting.html#cb170-1"></a>cap <span class="kw">drop</span> y_error <span class="kw">mse</span> rmspe mppe mappe</span>
+<span id="cb170-2"><a href="forecasting.html#cb170-2"></a><span class="kw">gen</span> y_error=y_fit-yyy</span>
+<span id="cb170-3"><a href="forecasting.html#cb170-3"></a><span class="co">/* compute the forecast evaluation statistics for post-1999Q1 sample */</span></span>
+<span id="cb170-4"><a href="forecasting.html#cb170-4"></a><span class="kw">replace</span> y_error=. <span class="kw">if</span> time_2&lt;tq(1999q1) </span>
+<span id="cb170-5"><a href="forecasting.html#cb170-5"></a><span class="kw">egen</span> <span class="kw">mse</span>=<span class="kw">mean</span>(y_error^2)</span>
+<span id="cb170-6"><a href="forecasting.html#cb170-6"></a><span class="kw">gen</span> rmspe=<span class="fu">sqrt</span>(<span class="kw">mse</span>)      		</span>
+<span id="cb170-7"><a href="forecasting.html#cb170-7"></a><span class="kw">egen</span> mppe=<span class="kw">mean</span>(y_error/yyy)</span>
+<span id="cb170-8"><a href="forecasting.html#cb170-8"></a><span class="kw">egen</span> mappe=<span class="kw">mean</span>(<span class="fu">abs</span>(y_error/yyy))</span></code></pre></div>
+<div class="sourceCode" id="cb171"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb171-1"><a href="forecasting.html#cb171-1"></a><span class="ot">list</span> rmspe mppe mappe <span class="kw">in</span> 1/1</span></code></pre></div>
+<pre><code>     |    rmspe       mppe      mappe |
+     |--------------------------------|
+  1. | .0054047   .0002028   .0004999 |
+     +--------------------------------+</code></pre>
+</div>
+<div id="dynamicextrapolationrecursive-forecasts" class="section level2">
+<h2><span class="header-section-number">6.2</span> Dynamic/Extrapolation/Recursive forecasts</h2>
+<blockquote>
+<ol style="list-style-type: decimal">
+<li><strong>estimation sample is fixed as (1957q1, 1998q4), forecast horizon ranges from 1 to 30</strong></li>
+<li><strong>dynamic forecasts start with 1999q1</strong></li>
+</ol>
+</blockquote>
+<div class="sourceCode" id="cb173"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb173-1"><a href="forecasting.html#cb173-1"></a><span class="co">/* use full sample for estimation */</span></span>
+<span id="cb173-2"><a href="forecasting.html#cb173-2"></a><span class="co">/* arima d.yyy if tin(,1998q4), arima(1,0,1) */</span></span>
+<span id="cb173-3"><a href="forecasting.html#cb173-3"></a>   <span class="kw">arima</span> <span class="kw">d</span>.yyy <span class="kw">if</span> <span class="fu">tin</span>(,1998q4), ma(1 2 4 10 11)</span>
+<span id="cb173-4"><a href="forecasting.html#cb173-4"></a><span class="co">/* arima d2.yyy if tin(,1998q4), arima(1,0,1) */</span></span></code></pre></div>
+<pre><code>(setting optimization to BHHH)
+Iteration 0:   log likelihood =  551.48788  
+Iteration 1:   log likelihood =  551.58321  
+Iteration 2:   log likelihood =  551.60347  
+Iteration 3:   log likelihood =  551.60837  
+Iteration 4:   log likelihood =  551.60985  
+(switching optimization to BFGS)
+Iteration 5:   log likelihood =  551.61038  
+Iteration 6:   log likelihood =  551.61069  
+Iteration 7:   log likelihood =  551.61072  
+
+ARIMA regression
+
+Sample:  1957q2 - 1998q4                        Number of obs     =        167
+                                                Wald chi2(5)      =      44.93
+Log likelihood =  551.6107                      Prob &gt; chi2       =     0.0000
+
+------------------------------------------------------------------------------
+             |                 OPG
+       D.yyy |      Coef.   Std. Err.      z    P&gt;|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+yyy          |
+       _cons |   .0175587    .001431    12.27   0.000     .0147539    .0203634
+-------------+----------------------------------------------------------------
+ARMA         |
+          ma |
+         L1. |   .2914819   .0661621     4.41   0.000     .1618066    .4211572
+         L2. |   .1317165    .080453     1.64   0.102    -.0259686    .2894015
+         L4. |   .1685373   .0698476     2.41   0.016     .0316385    .3054361
+        L10. |   .1644854   .0720823     2.28   0.022     .0232067     .305764
+        L11. |   .2766332   .0868364     3.19   0.001     .1064369    .4468294
+-------------+----------------------------------------------------------------
+      /sigma |   .0088642   .0003882    22.83   0.000     .0081033     .009625
+------------------------------------------------------------------------------
+Note: The test of the variance against zero is one sided, and the two-sided
+      confidence interval is truncated at zero.</code></pre>
+<div class="sourceCode" id="cb175"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb175-1"><a href="forecasting.html#cb175-1"></a>cap <span class="kw">drop</span> y_dyn dy_dyn	<span class="co">/* forecasts start in 1999Q1 */</span>	</span>
+<span id="cb175-2"><a href="forecasting.html#cb175-2"></a><span class="kw">predict</span> y_dyn, <span class="fu">y</span> dynamic(tq(1999q1))		</span>
+<span id="cb175-3"><a href="forecasting.html#cb175-3"></a><span class="co">/* If dynamic() is not specified, actual values are used for lagged values of y(t) */</span></span>
+<span id="cb175-4"><a href="forecasting.html#cb175-4"></a><span class="co">/* to produce one-step-ahead forecasts. */</span>	</span>
+<span id="cb175-5"><a href="forecasting.html#cb175-5"></a><span class="kw">predict</span> dy_dyn, <span class="kw">xb</span> dynamic(tq(1999q1))	</span>
+<span id="cb175-6"><a href="forecasting.html#cb175-6"></a><span class="kw">label</span> <span class="kw">var</span> y_dyn <span class="st">&quot;dynamic forecasts of levels&quot;</span></span>
+<span id="cb175-7"><a href="forecasting.html#cb175-7"></a><span class="kw">label</span> <span class="kw">var</span> dy_dyn <span class="st">&quot;dynamic forecasts of differences&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb176"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb176-1"><a href="forecasting.html#cb176-1"></a><span class="ot">list</span> time y_dyn dy_dyn <span class="kw">if</span> time_2&gt;=tq(1999q1)</span></code></pre></div>
+<pre><code>     |   time      y_dyn     dy_dyn |
+     |------------------------------|
+169. | 1999Q1   9.118066   .0182319 |
+170. | 1999Q2   9.132398   .0143322 |
+171. | 1999Q3    9.15017   .0177723 |
+172. | 1999Q4   9.167582   .0174116 |
+173. | 2000Q1   9.185462   .0178808 |
+     |------------------------------|
+174. | 2000Q2   9.202712   .0172498 |
+175. | 2000Q3   9.219089    .016376 |
+176. | 2000Q4   9.235211   .0161228 |
+177. | 2001Q1   9.250524   .0153125 |
+178. | 2001Q2   9.268696   .0181724 |
+     |------------------------------|
+179. | 2001Q3   9.286902    .018206 |
+180. | 2001Q4   9.304461   .0175587 |
+181. | 2002Q1    9.32202   .0175587 |
+182. | 2002Q2   9.339578   .0175587 |
+183. | 2002Q3   9.357137   .0175587 |
+     |------------------------------|
+184. | 2002Q4   9.374695   .0175587 |
+185. | 2003Q1   9.392254   .0175587 |
+186. | 2003Q2   9.409813   .0175587 |
+187. | 2003Q3   9.427371   .0175587 |
+188. | 2003Q4    9.44493   .0175587 |
+     |------------------------------|
+189. | 2004Q1   9.462488   .0175587 |
+190. | 2004Q2   9.480047   .0175587 |
+191. | 2004Q3   9.497605   .0175587 |
+192. | 2004Q4   9.515164   .0175587 |
+193. | 2005Q1   9.532723   .0175587 |
+     |------------------------------|
+194. | 2005Q2   9.550282   .0175587 |
+195. | 2005Q3   9.567841   .0175587 |
+196. | 2005Q4   9.585399   .0175587 |
+197. | 2006Q1   9.602958   .0175587 |
+198. | 2006Q2   9.620517   .0175587 |
+     |------------------------------|
+199. | 2006Q3   9.638075   .0175587 |
+200. | 2006Q4   9.655634   .0175587 |
+     +------------------------------+</code></pre>
+<div class="sourceCode" id="cb178"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb178-1"><a href="forecasting.html#cb178-1"></a><span class="kw">tsline</span> yyy y_dyn <span class="kw">if</span> <span class="fu">tin</span>(1999q1,)</span></code></pre></div>
+<p><img src="plot34.svg" /></p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb179-1"><a href="forecasting.html#cb179-1"></a>cap <span class="kw">drop</span> y_error <span class="kw">mse</span> rmspe mppe mappe</span>
+<span id="cb179-2"><a href="forecasting.html#cb179-2"></a><span class="kw">gen</span> y_error=y_dyn-yyy</span>
+<span id="cb179-3"><a href="forecasting.html#cb179-3"></a><span class="kw">replace</span> y_error=. <span class="kw">if</span> time_2&lt;tq(1999q1)</span>
+<span id="cb179-4"><a href="forecasting.html#cb179-4"></a><span class="kw">egen</span> <span class="kw">mse</span>=<span class="kw">mean</span>(y_error^2)</span>
+<span id="cb179-5"><a href="forecasting.html#cb179-5"></a><span class="kw">gen</span> rmspe=<span class="fu">sqrt</span>(<span class="kw">mse</span>)      		</span>
+<span id="cb179-6"><a href="forecasting.html#cb179-6"></a><span class="kw">egen</span> mppe=<span class="kw">mean</span>(y_error/yyy)</span>
+<span id="cb179-7"><a href="forecasting.html#cb179-7"></a><span class="kw">egen</span> mappe=<span class="kw">mean</span>(<span class="fu">abs</span>(y_error/yyy))</span></code></pre></div>
+<div class="sourceCode" id="cb180"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb180-1"><a href="forecasting.html#cb180-1"></a><span class="ot">list</span> rmspe mppe mappe <span class="kw">in</span> 1/1</span></code></pre></div>
+<pre><code>     |    rmspe      mppe     mappe |
+     |------------------------------|
+  1. | .0936204   .008643   .008643 |
+     +------------------------------+</code></pre>
+</div>
+<div id="step-ahead-forecasts" class="section level2">
+<h2><span class="header-section-number">6.3</span> 1-step-ahead forecasts</h2>
+<blockquote>
+<ol style="list-style-type: decimal">
+<li><strong>estimation sample starts with (1957q1, 1998q4), then expands with one additonal observation at a time, forecast horizon is fixed as h=1</strong></li>
+<li><strong>reestimate the model with each additional observation</strong></li>
+</ol>
+</blockquote>
+<div class="sourceCode" id="cb182"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb182-1"><a href="forecasting.html#cb182-1"></a>cap <span class="kw">drop</span> y_hat</span>
+<span id="cb182-2"><a href="forecasting.html#cb182-2"></a><span class="kw">gen</span> y_hat = .</span>
+<span id="cb182-3"><a href="forecasting.html#cb182-3"></a>cap <span class="kw">drop</span> y_hat_table</span>
+<span id="cb182-4"><a href="forecasting.html#cb182-4"></a><span class="kw">gen</span> y_hat_table = .</span>
+<span id="cb182-5"><a href="forecasting.html#cb182-5"></a><span class="kw">label</span> <span class="kw">var</span> y_hat_table <span class="st">&quot;yyy, ARIMA, h=1&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb183"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb183-1"><a href="forecasting.html#cb183-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
+<span id="cb183-2"><a href="forecasting.html#cb183-2"></a><span class="kw">local</span> <span class="kw">h</span> = 1      <span class="co">/* set the h for h-step-ahead-forcast */</span> </span>
+<span id="cb183-3"><a href="forecasting.html#cb183-3"></a><span class="kw">local</span> i=168      <span class="co">/* set last obs of estimation sample */</span></span>
+<span id="cb183-4"><a href="forecasting.html#cb183-4"></a><span class="kw">local</span> <span class="ot">l</span>=<span class="ot">`i&#39;</span>+<span class="ot">`h&#39;</span></span>
+<span id="cb183-5"><a href="forecasting.html#cb183-5"></a><span class="kw">local</span> <span class="kw">k</span>=198      <span class="co">/* set last obs of forecast sample */</span></span>
+<span id="cb183-6"><a href="forecasting.html#cb183-6"></a></span>
+<span id="cb183-7"><a href="forecasting.html#cb183-7"></a><span class="kw">while</span> <span class="ot">`i&#39;</span> &lt;=<span class="ot">`k&#39;</span>-<span class="ot">`h&#39;</span> {</span>
+<span id="cb183-8"><a href="forecasting.html#cb183-8"></a></span>
+<span id="cb183-9"><a href="forecasting.html#cb183-9"></a><span class="co">/* quietly arima d.yyy in 1/`i&#39;, arima(1,0,1) change model as needed */</span></span>
+<span id="cb183-10"><a href="forecasting.html#cb183-10"></a> <span class="kw">quietly</span> <span class="kw">arima</span> <span class="kw">d</span>.yyy <span class="kw">in</span> 1/<span class="ot">`i&#39;</span>, ma(1 2 4 10 11)</span>
+<span id="cb183-11"><a href="forecasting.html#cb183-11"></a><span class="co">/* quietly arima d2.yyy in 1/`i&#39;, arima(1,0,1)	*/</span></span>
+<span id="cb183-12"><a href="forecasting.html#cb183-12"></a></span>
+<span id="cb183-13"><a href="forecasting.html#cb183-13"></a>cap <span class="kw">drop</span> y_hat	</span>
+<span id="cb183-14"><a href="forecasting.html#cb183-14"></a><span class="kw">quietly</span> <span class="kw">predict</span> y_hat, <span class="fu">y</span> </span>
+<span id="cb183-15"><a href="forecasting.html#cb183-15"></a>		</span>
+<span id="cb183-16"><a href="forecasting.html#cb183-16"></a><span class="kw">local</span> j=<span class="ot">`i&#39;</span>+<span class="ot">`h&#39;</span> </span>
+<span id="cb183-17"><a href="forecasting.html#cb183-17"></a><span class="co">/* list time y_hat in `j&#39;/`j&#39; */</span></span>
+<span id="cb183-18"><a href="forecasting.html#cb183-18"></a><span class="kw">quietly</span> <span class="kw">replace</span> y_hat_table = y_hat <span class="kw">in</span> <span class="ot">`j&#39;</span>/<span class="ot">`j&#39;</span></span>
+<span id="cb183-19"><a href="forecasting.html#cb183-19"></a></span>
+<span id="cb183-20"><a href="forecasting.html#cb183-20"></a><span class="kw">local</span> i=<span class="ot">`i&#39;</span>+1</span>
+<span id="cb183-21"><a href="forecasting.html#cb183-21"></a>}</span>
+<span id="cb183-22"><a href="forecasting.html#cb183-22"></a></span>
+<span id="cb183-23"><a href="forecasting.html#cb183-23"></a><span class="ot">list</span> time yyy y_hat_table <span class="kw">in</span> <span class="ot">`l&#39;</span>/<span class="ot">`k&#39;</span></span>
+<span id="cb183-24"><a href="forecasting.html#cb183-24"></a><span class="kw">tsline</span> yyy y_hat_table <span class="kw">in</span> <span class="ot">`l&#39;</span>/<span class="ot">`k&#39;</span></span></code></pre></div>
+<pre><code>     |   time        yyy   y_hat_~e |
+     |------------------------------|
+169. | 1999Q1   9.112352   9.118066 |
+170. | 1999Q2    9.12414   9.125053 |
+171. | 1999Q3    9.13922   9.140858 |
+172. | 1999Q4   9.161098   9.155983 |
+173. | 2000Q1   9.172576   9.179264 |
+     |------------------------------|
+174. | 2000Q2   9.192461    9.18838 |
+175. | 2000Q3   9.196454   9.208769 |
+176. | 2000Q4   9.205689   9.210423 |
+177. | 2001Q1   9.212488   9.216632 |
+178. | 2001Q2   9.223148    9.22934 |
+     |------------------------------|
+179. | 2001Q3    9.22376   9.235682 |
+180. | 2001Q4   9.232718    9.23404 |
+181. | 2002Q1   9.243127   9.246629 |
+182. | 2002Q2   9.252115   9.258266 |
+183. | 2002Q3   9.261737   9.264979 |
+     |------------------------------|
+184. | 2002Q4   9.267769   9.275546 |
+185. | 2003Q1   9.278522   9.280374 |
+186. | 2003Q2   9.290241   9.288405 |
+187. | 2003Q3   9.313447   9.304872 |
+188. | 2003Q4   9.325409    9.32963 |
+     |------------------------------|
+189. | 2004Q1   9.344075   9.338203 |
+190. | 2004Q2   9.363002   9.359034 |
+191. | 2004Q3   9.375804   9.382712 |
+192. | 2004Q4   9.390183   9.388437 |
+193. | 2005Q1   9.406992   9.405504 |
+     |------------------------------|
+194. | 2005Q2   9.421096   9.423127 |
+195. | 2005Q3   9.439346    9.43382 |
+196. | 2005Q4   9.451756   9.457699 |
+197. | 2006Q1   9.473351   9.469869 |
+198. | 2006Q2   9.487767   9.491684 |
+     +------------------------------+
+
+
+(file plot35.svg written in SVG format)</code></pre>
+<p><img src="plot35.svg" /></p>
+<div class="sourceCode" id="cb185"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb185-1"><a href="forecasting.html#cb185-1"></a>cap <span class="kw">drop</span> y_error <span class="kw">mse</span> rmspe mppe mappe</span>
+<span id="cb185-2"><a href="forecasting.html#cb185-2"></a><span class="kw">gen</span> y_error=y_hat_table-yyy</span>
+<span id="cb185-3"><a href="forecasting.html#cb185-3"></a><span class="kw">egen</span> <span class="kw">mse</span>= <span class="kw">mean</span>(y_error^2)</span>
+<span id="cb185-4"><a href="forecasting.html#cb185-4"></a><span class="kw">gen</span> rmspe= <span class="fu">sqrt</span>(<span class="kw">mse</span>)      		</span>
+<span id="cb185-5"><a href="forecasting.html#cb185-5"></a><span class="kw">egen</span> mppe=<span class="kw">mean</span>(y_error/yyy)</span>
+<span id="cb185-6"><a href="forecasting.html#cb185-6"></a><span class="kw">egen</span> mappe=<span class="kw">mean</span>(<span class="fu">abs</span>(y_error/yyy))</span></code></pre></div>
+<div class="sourceCode" id="cb186"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb186-1"><a href="forecasting.html#cb186-1"></a><span class="ot">list</span> rmspe mppe mappe <span class="kw">in</span> 1/1</span></code></pre></div>
+<pre><code>     |   rmspe       mppe      mappe |
+     |-------------------------------|
+  1. | .005529   .0002152   .0005132 |
+     +-------------------------------+</code></pre>
+<div class="sourceCode" id="cb188"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb188-1"><a href="forecasting.html#cb188-1"></a>cap <span class="kw">drop</span> y_h1</span>
+<span id="cb188-2"><a href="forecasting.html#cb188-2"></a><span class="kw">gen</span> y_h1=y_hat_table</span>
+<span id="cb188-3"><a href="forecasting.html#cb188-3"></a><span class="kw">label</span> <span class="kw">var</span> y_h1 <span class="st">&quot;1-step-ahead forecasts of levels&quot;</span></span></code></pre></div>
+</div>
+<div id="step-ahead-forecasts-1" class="section level2">
+<h2><span class="header-section-number">6.4</span> 4-step-ahead forecasts</h2>
+<blockquote>
+<ol style="list-style-type: decimal">
+<li><strong>estimation sample starts with (1957q1, 1998q4), then expands with one additonal observation at a time, forecast horizon is fixed as h=4</strong></li>
+<li><strong>reestimate the model with each additional observation</strong></li>
+</ol>
+</blockquote>
+<div class="sourceCode" id="cb189"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb189-1"><a href="forecasting.html#cb189-1"></a>cap <span class="kw">drop</span> y_hat</span>
+<span id="cb189-2"><a href="forecasting.html#cb189-2"></a><span class="kw">gen</span> y_hat = .</span>
+<span id="cb189-3"><a href="forecasting.html#cb189-3"></a>cap <span class="kw">drop</span> y_hat_table</span>
+<span id="cb189-4"><a href="forecasting.html#cb189-4"></a><span class="kw">gen</span> y_hat_table = .</span>
+<span id="cb189-5"><a href="forecasting.html#cb189-5"></a><span class="kw">label</span> <span class="kw">var</span> y_hat_table <span class="st">&quot;yyy, ARIMA, h=4&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb190"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb190-1"><a href="forecasting.html#cb190-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
+<span id="cb190-2"><a href="forecasting.html#cb190-2"></a><span class="kw">local</span> <span class="kw">h</span> = 4         <span class="co">/* set the h for h-step-ahead-forcast */</span> </span>
+<span id="cb190-3"><a href="forecasting.html#cb190-3"></a><span class="kw">local</span> i=168         <span class="co">/* set last obs of estimation sample */</span></span>
+<span id="cb190-4"><a href="forecasting.html#cb190-4"></a><span class="kw">local</span> t0=tq(1998q4) <span class="co">/* set ending date of estimation sample */</span></span>
+<span id="cb190-5"><a href="forecasting.html#cb190-5"></a><span class="kw">local</span> <span class="ot">l</span>=<span class="ot">`i&#39;</span>+<span class="ot">`h&#39;</span></span>
+<span id="cb190-6"><a href="forecasting.html#cb190-6"></a><span class="kw">local</span> <span class="kw">k</span>=198         <span class="co">/* set last obs of forecast sample */</span></span>
+<span id="cb190-7"><a href="forecasting.html#cb190-7"></a></span>
+<span id="cb190-8"><a href="forecasting.html#cb190-8"></a><span class="kw">while</span> <span class="ot">`i&#39;</span> &lt;=<span class="ot">`k&#39;</span>-<span class="ot">`h&#39;</span> {</span>
+<span id="cb190-9"><a href="forecasting.html#cb190-9"></a></span>
+<span id="cb190-10"><a href="forecasting.html#cb190-10"></a><span class="co">/* quietly arima d.yyy in 1/`i&#39;, arima(1,0,1)	 change model as needed */</span></span>
+<span id="cb190-11"><a href="forecasting.html#cb190-11"></a> <span class="kw">quietly</span> <span class="kw">arima</span> <span class="kw">d</span>.yyy <span class="kw">in</span> 1/<span class="ot">`i&#39;</span>, ma(1 2 4 10 11)</span>
+<span id="cb190-12"><a href="forecasting.html#cb190-12"></a><span class="co">/* quietly arima d2.yyy in 1/`i&#39;, arima(1,0,1) */</span>	</span>
+<span id="cb190-13"><a href="forecasting.html#cb190-13"></a></span>
+<span id="cb190-14"><a href="forecasting.html#cb190-14"></a>cap <span class="kw">drop</span> y_hat	</span>
+<span id="cb190-15"><a href="forecasting.html#cb190-15"></a><span class="kw">quietly</span> <span class="kw">predict</span> y_hat, <span class="fu">y</span> dynamic(<span class="ot">`t0&#39;</span>+1)</span>
+<span id="cb190-16"><a href="forecasting.html#cb190-16"></a>		</span>
+<span id="cb190-17"><a href="forecasting.html#cb190-17"></a><span class="kw">local</span> j=<span class="ot">`i&#39;</span>+<span class="ot">`h&#39;</span> </span>
+<span id="cb190-18"><a href="forecasting.html#cb190-18"></a><span class="co">/*	list time y_hat in `j&#39;/`j&#39; */</span></span>
+<span id="cb190-19"><a href="forecasting.html#cb190-19"></a><span class="kw">quietly</span> <span class="kw">replace</span> y_hat_table = y_hat <span class="kw">in</span> <span class="ot">`j&#39;</span>/<span class="ot">`j&#39;</span></span>
+<span id="cb190-20"><a href="forecasting.html#cb190-20"></a></span>
+<span id="cb190-21"><a href="forecasting.html#cb190-21"></a><span class="kw">local</span> i=<span class="ot">`i&#39;</span>+1</span>
+<span id="cb190-22"><a href="forecasting.html#cb190-22"></a><span class="kw">local</span> t0=<span class="ot">`t0&#39;</span>+1</span>
+<span id="cb190-23"><a href="forecasting.html#cb190-23"></a>}</span>
+<span id="cb190-24"><a href="forecasting.html#cb190-24"></a><span class="ot">list</span> time yyy y_hat_table <span class="kw">in</span> <span class="ot">`l&#39;</span>/<span class="ot">`k&#39;</span></span>
+<span id="cb190-25"><a href="forecasting.html#cb190-25"></a><span class="kw">tsline</span> yyy y_hat_table <span class="kw">in</span> <span class="ot">`l&#39;</span>/<span class="ot">`k&#39;</span></span></code></pre></div>
+<pre><code>     |   time        yyy   y_hat_~e |
+     |------------------------------|
+172. | 1999Q4   9.161098   9.167582 |
+173. | 2000Q1   9.172576     9.1763 |
+174. | 2000Q2   9.192461   9.192025 |
+175. | 2000Q3   9.196454   9.205711 |
+176. | 2000Q4   9.205689   9.229968 |
+     |------------------------------|
+177. | 2001Q1   9.212488   9.234512 |
+178. | 2001Q2   9.223148   9.259163 |
+179. | 2001Q3    9.22376   9.256402 |
+180. | 2001Q4   9.232718   9.264427 |
+181. | 2002Q1   9.243127   9.274498 |
+     |------------------------------|
+182. | 2002Q2   9.252115   9.282114 |
+183. | 2002Q3   9.261737    9.27998 |
+184. | 2002Q4   9.267769   9.293777 |
+185. | 2003Q1   9.278522   9.304202 |
+186. | 2003Q2   9.290241   9.306887 |
+     |------------------------------|
+187. | 2003Q3   9.313447   9.316544 |
+188. | 2003Q4   9.325409   9.318444 |
+189. | 2004Q1   9.344075   9.328505 |
+190. | 2004Q2   9.363002   9.344928 |
+191. | 2004Q3   9.375804   9.375166 |
+     |------------------------------|
+192. | 2004Q4   9.390183   9.382996 |
+193. | 2005Q1   9.406992   9.407466 |
+194. | 2005Q2   9.421096   9.428817 |
+195. | 2005Q3   9.439346   9.431775 |
+196. | 2005Q4   9.451756   9.451321 |
+     |------------------------------|
+197. | 2006Q1   9.473351   9.472584 |
+198. | 2006Q2   9.487767   9.487797 |
+     +------------------------------+
+
+
+(file plot36.svg written in SVG format)</code></pre>
+<p><img src="plot36.svg" /></p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb192-1"><a href="forecasting.html#cb192-1"></a>cap <span class="kw">drop</span> y_error <span class="kw">mse</span> rmspe mppe mappe</span>
+<span id="cb192-2"><a href="forecasting.html#cb192-2"></a><span class="kw">gen</span> y_error=y_hat_table-yyy</span>
+<span id="cb192-3"><a href="forecasting.html#cb192-3"></a><span class="kw">egen</span> <span class="kw">mse</span>= <span class="kw">mean</span>(y_error^2)</span>
+<span id="cb192-4"><a href="forecasting.html#cb192-4"></a><span class="kw">gen</span> rmspe= <span class="fu">sqrt</span>(<span class="kw">mse</span>)      		</span>
+<span id="cb192-5"><a href="forecasting.html#cb192-5"></a><span class="kw">egen</span> mppe=<span class="kw">mean</span>(y_error/yyy)</span>
+<span id="cb192-6"><a href="forecasting.html#cb192-6"></a><span class="kw">egen</span> mappe=<span class="kw">mean</span>(<span class="fu">abs</span>(y_error/yyy))</span></code></pre></div>
+<div class="sourceCode" id="cb193"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb193-1"><a href="forecasting.html#cb193-1"></a><span class="ot">list</span> rmspe mppe mappe <span class="kw">in</span> 1/1</span></code></pre></div>
+<pre><code>     |    rmspe       mppe      mappe |
+     |--------------------------------|
+  1. | .0184706   .0010759   .0015318 |
+     +--------------------------------+</code></pre>
+<div class="sourceCode" id="cb195"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb195-1"><a href="forecasting.html#cb195-1"></a>cap <span class="kw">drop</span> y_h4</span>
+<span id="cb195-2"><a href="forecasting.html#cb195-2"></a><span class="kw">gen</span> y_h4=y_hat_table</span>
+<span id="cb195-3"><a href="forecasting.html#cb195-3"></a><span class="kw">label</span> <span class="kw">var</span> y_h4 <span class="st">&quot;4-step-ahead forecasts of levels&quot;</span></span></code></pre></div>
+</div>
+<div id="forecast-evaluation-statistics-rmspe-mppe-mappe" class="section level2">
+<h2><span class="header-section-number">6.5</span> Forecast evaluation statistics: RMSPE, MPPE, MAPPE</h2>
+<blockquote>
+<p><strong>check <em>Notes_ARIMA.pdf</em> for details</strong></p>
+</blockquote>
+<div class="sourceCode" id="cb196"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb196-1"><a href="forecasting.html#cb196-1"></a><span class="kw">tsline</span> yyy y_fit y_dyn y_h1 y_h4 <span class="kw">if</span> <span class="fu">tin</span>(1999q1,)</span></code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="arma-modeling.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
